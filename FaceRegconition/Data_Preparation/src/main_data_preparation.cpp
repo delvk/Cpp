@@ -54,7 +54,7 @@ int size_calc(const char *path, int ratio)
 		return EXIT_FAILURE;
 	}
 }
-void my_readdir(const char *path, FILE *fp_train, FILE *fp_test, int &id)
+void my_readdir(const char *path, FILE *fp_train, FILE *fp_test, FILE *fp_data, int &id)
 {
 	//initial variable
 	int sample_size = 20,
@@ -82,11 +82,11 @@ void my_readdir(const char *path, FILE *fp_train, FILE *fp_test, int &id)
 					{
 						/* +2: One for directory separator, one for string terminator */
 						/* Call myself recusively */
-						my_readdir(newpath, fp_train, fp_test, id);
+						my_readdir(newpath, fp_train, fp_test, fp_data, id);
 						free(newpath);
 
-						// Tang id moi lan qua mot thu muc
-						id++;
+						// Write name & id plus increase id
+						fprintf(fp_data, "%d;%s\n", id++, ent->d_name);
 					}
 					if (ent->d_type == DT_REG)
 					{
@@ -109,7 +109,6 @@ int main(int argc, const char *argv[])
 {
 	//Initial Variable for argument
 	string input_database_path;
-	string output_folder_path = "output";
 	// Check for valid command line arguments, print usage
 	// if no arguments were given.
 	//message
@@ -119,24 +118,17 @@ int main(int argc, const char *argv[])
 		 << endl;
 	if (argc == 1)
 	{
-		cout << "No other arguments other than default application name, please input at least dataset path" << endl;
+		cout << "No other arguments other than default application name, please input at dataset path" << endl;
 		exit(-1);
 	}
 	else if (argc == 2)
 	{
 		input_database_path = string(argv[1]);
-		cout << "You only input database_path, is this okay (Y/N) ?" << endl;
-	}
-	else if (argc == 3)
-	{
-		input_database_path = string(argv[1]);
-		output_folder_path = string(argv[2]);
 		cout << "Is this okay (Y/N) ?" << endl;
 	}
 	else
 		exit(1);
 	cout << "- Database_folder_path: " << input_database_path << endl;
-	cout << "- Output_folder_path: " << output_folder_path << endl;
 	// Exist if user want
 	char c[30];
 	int attemp = 5;
@@ -163,27 +155,29 @@ int main(int argc, const char *argv[])
 	if (attemp == 0)
 		exit(0);
 
-	/* create output folder */
-	const int dir_err = mkdir(output_folder_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	if (-1 == dir_err)
-	{
-		printf("Error creating directory output, maybe already exit! \n");
-	}
+	//init variable
+	int idx = 0;
 	char train_file[30],
-		test_file[30];
-	strcpy(train_file, "train.txt");
-	strcpy(test_file, "test.txt");
+		test_file[30],
+		database_file[30];
+
+	//starting
+	strcpy(train_file, "train_set.csv");
+	strcpy(test_file, "test_set.csv");
+	strcpy(database_file, "database.csv");
 	FILE *fp_train = fopen(train_file, "w");
 	FILE *fp_test = fopen(test_file, "w");
-	int idx = 0;
+	FILE *fp_data = fopen(database_file, "w");
 
 	if (input_database_path.back() == '/')
 		input_database_path = input_database_path.substr(0, input_database_path.length() - 1);
-	my_readdir(input_database_path.c_str(), fp_train, fp_test, idx);
+	my_readdir(input_database_path.c_str(), fp_train, fp_test, fp_data, idx);
 	if (fp_train != NULL)
 		fclose(fp_train);
 	if (fp_test != NULL)
 		fclose(fp_test);
+	if (fp_data != NULL)
+		fclose(fp_data);
 	cout << "Success, make sure to check 3 files output" << endl;
 	return 0;
 }

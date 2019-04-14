@@ -47,7 +47,7 @@ int main(int argc, const char *argv[]) {
 	vector<Mat> testSample;
 	vector<int> testLabel;
 	try {
-		string fn = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Training_model/res/testing_set.csv";
+		string fn = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Data_Preparation/test_set.csv";
 		read_csv(fn, testSample, testLabel);
 	}
 	catch (const cv::Exception& e) {

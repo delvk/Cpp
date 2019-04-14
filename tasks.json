@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "g++ build active file",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}",
+        "-I/usr/local/installation/OpenCV/include/opencv4",
+        "-L/usr/local/installation/OpenCV/lib",  
+        "-I/usr/local/include",
+        "-I/usr/include", 
+     "-lopencv_shape", 
+     "-lopencv_stitching", 
+     "-lopencv_objdetect", 
+     "-lopencv_superres", 
+     "-lopencv_videostab", 
+     "-lopencv_calib3d",
+     "-lopencv_features2d", 
+     "-lopencv_highgui", 
+     "-lopencv_videoio", 
+     "-lopencv_imgcodecs", 
+     "-lopencv_video", 
+     "-lopencv_photo", 
+     "-lopencv_ml", 
+     "-lopencv_imgproc", 
+     "-lopencv_flann", 
+     "-lopencv_core"
+      ],
+      "options": {
+        "cwd": "/usr/bin"
+      }
+    }
+  ],
+  "version": "2.0.0"
+}

@@ -54,13 +54,14 @@ int size_calc(const char *path, int ratio)
 		return EXIT_FAILURE;
 	}
 }
-void my_readdir(const char *path, FILE *fp, int &id)
+void my_readdir(const char *path, FILE *fp_train, FILE *fp_test, int &id)
 {
 	//initial variable
 	int sample_size = 20,
 		size_train = (int)sample_size * 0.8,
 		size_test = (int)sample_size * 0.2,
-		size_vali = 0;
+		size_vali = 0,
+		count = 0;
 
 	DIR *dir = opendir(path);
 	if (dir != NULL)
@@ -80,9 +81,8 @@ void my_readdir(const char *path, FILE *fp, int &id)
 					if (ent->d_type == DT_DIR)
 					{
 						/* +2: One for directory separator, one for string terminator */
-
 						/* Call myself recusively */
-						my_readdir(newpath, fp, id);
+						my_readdir(newpath, fp_train, fp_test, id);
 						free(newpath);
 
 						// Tang id moi lan qua mot thu muc
@@ -90,8 +90,15 @@ void my_readdir(const char *path, FILE *fp, int &id)
 					}
 					if (ent->d_type == DT_REG)
 					{
-
-						fprintf(fp, "%s;%d\n", newpath, id);
+						if (count < size_train)
+						{
+							fprintf(fp_train, "%s;%d\n", newpath, id);
+							count++;
+						}
+						else
+						{
+							fprintf(fp_test, "%s;%d\n", newpath, id);
+						}
 					}
 				}
 			}
@@ -162,16 +169,21 @@ int main(int argc, const char *argv[])
 	{
 		printf("Error creating directory output, maybe already exit! \n");
 	}
-	char filename[30];
-	strcpy(filename, "list.txt");
-	FILE *fp = fopen(filename, "w");
+	char train_file[30],
+		test_file[30];
+	strcpy(train_file, "train.txt");
+	strcpy(test_file, "test.txt");
+	FILE *fp_train = fopen(train_file, "w");
+	FILE *fp_test = fopen(test_file, "w");
 	int idx = 0;
 
 	if (input_database_path.back() == '/')
 		input_database_path = input_database_path.substr(0, input_database_path.length() - 1);
-	my_readdir(input_database_path.c_str(), fp, idx);
-	if (fp != NULL)
-		fclose(fp);
+	my_readdir(input_database_path.c_str(), fp_train, fp_test, idx);
+	if (fp_train != NULL)
+		fclose(fp_train);
+	if (fp_test != NULL)
+		fclose(fp_test);
 	cout << "Success, make sure to check 3 files output" << endl;
 	return 0;
 }

@@ -1,11 +1,9 @@
 #include "../header/face_regconition.hpp"
 #include "../header/func_face_regcontion.hpp"
 
-
-
 int main(int argc, const char *argv[]) {
 	int what = userChooseAlg();
-	string file_model = "../Face_Regconition/output/";
+	string file_model = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Training_model/output/";
 	//start reading model
 	cout << "Reading model..." << endl;
 	Ptr<FaceRecognizer> model;
@@ -39,7 +37,6 @@ int main(int argc, const char *argv[]) {
 	model->read(file_model);
 	if (model->empty()) {
 		cout << "Model load khong thanh cong, dung chuong trinh " << endl;
-		cin.get();
 		return 0;
 	}
 	cout << "Load model successful" << endl;
@@ -50,7 +47,7 @@ int main(int argc, const char *argv[]) {
 	vector<Mat> testSample;
 	vector<int> testLabel;
 	try {
-		string fn = "D:/Work/My_Project/Cpp_PetProject/Data_Preparation/Data_Output/testing_set.csv";
+		string fn = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Training_model/res/testing_set.csv";
 		read_csv(fn, testSample, testLabel);
 	}
 	catch (const cv::Exception& e) {
@@ -89,7 +86,6 @@ int main(int argc, const char *argv[]) {
 		else check = "";
 		cout << check << "predict: " << predicted_label[i] << " | " << testLabel[i]<<" -- "<< predicted_confidence[i] << endl;
 	}
-
 	//Destroy mem
 	//data.clear();
 	testSample.clear();
@@ -97,6 +93,5 @@ int main(int argc, const char *argv[]) {
 	predicted_label.clear();
 	predicted_confidence.clear();
 	model->clear();
-	system("pause");
 	return 0;
 }

@@ -14,6 +14,7 @@
         "-I/usr/local/include",
         "-I/usr/include", 
      "-lopencv_shape", 
+     "-lopencv_face", 
      "-lopencv_stitching", 
      "-lopencv_objdetect", 
      "-lopencv_superres", 

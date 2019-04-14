@@ -5,11 +5,26 @@
 #include "../header/func_face_regcontion.hpp"
 #include <opencv2/core/types_c.h>
 // Function for Face Detection
-void detectAndDraw(Mat &img, CascadeClassifier &cascade, double scale);
+void detectAndDraw(Mat &img, CascadeClassifier &cascade, double scale, int id);
 string cascadeName;
 
 int main(int argc, const char **argv)
 {
+
+	//Get Parameters
+	cout << "usage: " << argv[0] << endl;
+	cout << "<pre-trained_model> <test_file_1> <test_file_2> ...." << endl;
+	cout << "\n----------------------------------------------------------\n\n";
+	if (argc == 1)
+	{
+		cout << "Please point to pre-trained model facefont" << endl;
+		exit(-1);
+	}
+	else
+	{
+		cout << argv[1] << endl;
+	}
+
 	// VideoCapture class for playing video for which faces to be detected
 	VideoCapture capture;
 	Mat frame, image;
@@ -19,14 +34,19 @@ int main(int argc, const char **argv)
 	double scale = 1;
 
 	// Change path before execution
-	cascade.load("/usr/local/installation/OpenCV/share/opencv4/haarcascades/haarcascade_frontalface_default.xml");
-	string test_path = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Face_Detection/res/test.1.jpg";
-	image = imread(test_path, IMREAD_COLOR);
-	detectAndDraw(image, cascade, scale);
+	cascade.load(string(argv[1]));
+	for (int i = 2; i < argc; i++)
+	{
+		string test_path = string(argv[i]);
+		image = imread(test_path, IMREAD_COLOR);
+		int id = i - 2;
+		detectAndDraw(image, cascade, scale, id);
+	}
+	waitKey(0);
 	return 0;
 }
 
-void detectAndDraw(Mat &img, CascadeClassifier &cascade, double scale)
+void detectAndDraw(Mat &img, CascadeClassifier &cascade, double scale, int id)
 {
 	vector<Rect> faces;
 	Mat gray, smallImg;
@@ -34,7 +54,7 @@ void detectAndDraw(Mat &img, CascadeClassifier &cascade, double scale)
 	cvtColor(img, gray, COLOR_BGR2GRAY); // Convert to Gray Scale
 
 	double fx = 1 / scale;
-    
+
 	// Resize the Grayscale Image
 	resize(gray, smallImg, Size(), fx, fx, INTER_LINEAR);
 	//equalizeHist(smallImg, smallImg);
@@ -81,7 +101,7 @@ void detectAndDraw(Mat &img, CascadeClassifier &cascade, double scale)
 				  color, 3, 8, 0);
 		//imshow("result", smallImgROI);
 	}
-	imshow("result", img);
-	cout << "Count: " << faces.size() << endl;
-	waitKey(0);
+	imshow(to_string(id), img);
+	cout << "ID: " << id << " - "
+		 << "Count: " << faces.size() << endl;
 }

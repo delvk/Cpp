@@ -2,9 +2,8 @@
 #include "../header/func_face_regcontion.hpp"
 int main(int argc, const char *argv[])
 {
-
 	//initial variables
-	string path_training_set = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Training/res/training_set.csv";
+	string path_training_set = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Data_Preparation/train_set.csv";
 	string output_folder = "output";
 
 	//Checking arguments

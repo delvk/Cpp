@@ -2,7 +2,6 @@
 #include "../header/func_face_regcontion.hpp"
 int main(int argc, const char *argv[])
 {
-
 	//initial variables
 	string path_training_set = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Training_model/res/training_set.csv";
 	string output_folder = "output";

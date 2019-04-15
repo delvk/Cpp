@@ -3,7 +3,7 @@
 int main(int argc, const char *argv[])
 {
 	//initial variables
-	string path_training_set = "/home/jake/Desktop/Projects/Cpp/FaceRegconition/Data_Preparation/train_set.csv";
+	string path_training_set;
 	string output_folder = "output";
 
 	//Checking arguments
@@ -11,28 +11,26 @@ int main(int argc, const char *argv[])
 	cout << "<path_training_set> <output_folder>" << endl;
 	cout << "\n----------------------------------------------------------\n"
 		 << endl;
-	if (argc == 1)
+	if (argc < 2)
 	{
-		cout << "No other arguments other than default application name, using default value (Y/N)?" << endl;
+		cout << "Please point to training_set" << endl;
 	}
-	else if (argc == 2)
+	else if (argc < 3)
 	{
 		path_training_set = string(argv[1]);
 		cout << "You only input database_path, is this okay (Y/N) ?" << endl;
 	}
-	else if (argc == 3)
+	else 
 	{
 		path_training_set = string(argv[1]);
 		output_folder = string(argv[2]);
 		cout << "Is this okay (Y/N) ?" << endl;
 	}
-	else
-		exit(1);
 	cout << "- path_training_set: " << path_training_set << endl;
 	cout << "- output_folder: " << output_folder << endl;
 	if (!checkUserEnter())
 	{
-		cout << "Thoat chuong trinh, bye !" << endl;
+		cout << "See ya later, bye !" << endl;
 		return 0;
 	}
 	// These vectors hold the images and corresponding labels.

@@ -10,50 +10,6 @@ using namespace std;
 #define DIR_SEPARATOR "/"
 #endif
 //initial argument
-void findAndReplaceAll(std::string &data, std::string toSearch, std::string replaceStr)
-{
-	// Get the first occurrence
-	size_t pos = data.find(toSearch);
-
-	// Repeat till end is reached
-	while (pos != std::string::npos)
-	{
-		// Replace this occurrence of Sub String
-		data.replace(pos, toSearch.size(), replaceStr);
-		// Get the next occurrence from the current position
-		pos = data.find(toSearch, pos + replaceStr.size());
-	}
-}
-int size_calc(const char *path, int ratio)
-{
-	//@ratio on scale to 10, for example ratio = 8 mean 80% training, 20% testing
-	if (1 < ratio || ratio > 9)
-	{
-		cout << "Wrong size for ratio" << endl;
-		return -1;
-	}
-	int file_count = 0;
-	DIR *dir;
-	struct dirent *entry;
-	dir = opendir("path"); /* There should be error handling after this */
-	if (dir != NULL)
-	{
-		while ((entry = readdir(dir)) != NULL)
-		{
-			if (entry->d_type == DT_REG)
-			{ /* If the entry is a regular file */
-				file_count++;
-			}
-		}
-		closedir(dir);
-		return EXIT_SUCCESS;
-	}
-	else
-	{
-		perror("couln't open directory");
-		return EXIT_FAILURE;
-	}
-}
 void my_readdir(const char *path, FILE *fp_train, FILE *fp_test, FILE *fp_data, int &id)
 {
 	//initial variable

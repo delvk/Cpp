@@ -6,9 +6,28 @@ void detect_and_crop(const char *image_path, string &output_path, string &name, 
 void dir_inter(string &path, string &output_path, string &name);
 int main(int argc, const char **argv)
 {
+    //parameter
+    cout << "usage: " << argv[0] << endl;
+    cout << "<label_name>" << endl;
+    cout << "\n----------------------------------------------------------\n"
+         << endl;
+    if (argc == 1)
+    {
+        cout << "Please declare example label" << endl;
+        exit(-1);
+    }
+    else if (argc == 2)
+    {
+        cout << "label: " << argv[1] << endl;
+    }
+    else if (argc > 2)
+        cout << "Only take first argument" << endl;
+    else
+        exit(-1);
+
     //Initial Variable
-    string folder_path = "res";                                                              //folder contain raw images
-    string name = "khuong";                                                                  //your name
+    string name = string(argv[1]);                                                           //folder contain raw images
+    string folder_path = "res";                                                              //your name
     string output_folder = "output";                                                         //parent output folder
     const int dir_err = mkdir(output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH); //create output folder if not exist
 
@@ -46,7 +65,8 @@ void detect_and_crop(const char *image_path, string &output_path, string &name, 
         try
         {
             string new_name = output_path + "/" + name + "." + to_string(idx++) + ".jpg";
-            imwrite(new_name, image_cropped, compression_params);
+            if (imwrite(new_name, image_cropped, compression_params))
+                cout << "created: " << new_name << endl;
         }
         catch (runtime_error &ex)
         {
